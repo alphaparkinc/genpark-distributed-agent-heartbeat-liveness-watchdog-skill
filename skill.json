@@ -1,0 +1,50 @@
+{
+  "name": "genpark-distributed-agent-heartbeat-liveness-watchdog-skill",
+  "version": "1.0.0",
+  "description": "Distributed Agent Fleet Heartbeat & Liveness Watchdog. Monitors heartbeat signals across distributed autonomous agent nodes, dynamically computes jitter-aware failover deadlines ($T_{\\text{timeout}} = \\mu + 3\\sigma$), isolates zombie/stalled workers, and coordinates state checkpoint hydration and failover rerouting.",
+  "tools": [
+    {
+      "name": "monitor_agent_fleet_liveness",
+      "description": "Record agent heartbeats, calculate dynamic jitter-aware timeout thresholds, detect dead or hung worker nodes, and trigger failover reassignments.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "record_heartbeat",
+              "audit_fleet_health",
+              "trigger_worker_failover",
+              "get_worker_metrics"
+            ],
+            "description": "Fleet liveness action."
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "Agent node worker identifier."
+          },
+          "reported_status": {
+            "type": "string",
+            "enum": [
+              "HEALTHY",
+              "BUSY",
+              "DEGRADED"
+            ],
+            "description": "Status payload in heartbeat pulse."
+          },
+          "cpu_load_pct": {
+            "type": "number",
+            "description": "Worker node CPU load percentage."
+          },
+          "active_task_id": {
+            "type": "string",
+            "description": "Current task execution ID."
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    }
+  ]
+}
